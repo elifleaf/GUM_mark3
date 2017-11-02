@@ -211,8 +211,10 @@ def check_aust (Jscale,J_rule):
 def check_mart (Jscale,J1,J2):
     first = Jscale[J1]
     second = Jscale[J2]
+    # if one of them is -1, afm
     if (first <= -0.9 and first >= -1) or (second <= -0.9 and second >= -1):
         return "afm"
+    # if both are 1, fm
     elif (first >= 0.9 and first <= 1) and (second >= 0.9 and second <= 1):
         return  "fm"
     else:
