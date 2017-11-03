@@ -29,7 +29,6 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
                 m_struct.set_atom_properties(j, atom_data, spin_style, spin_tol)
             #calculate_sums(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
             j_count = calculate_sums_scaled(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
-            calculate_sums(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
             # NEED TO ASSIGN SPIN TYPE HERE BASED ON CALCULATED SUMS - need a function for this.
             if m_struct.phase_name != 'prem':
                 if check_duplicate_structures(m_struct,m_struct_list)=='False':
@@ -92,7 +91,6 @@ def calculate_sums(m_struct, cluster_rule_list, j_rule_list, spin_style, spin_to
                                         if m_struct.basis[k].species in j_rule_list[l].neighbor_atom_list:
                                             if m_struct.basis[k].species != m_struct.basis[j].species:
                                                 m_struct.J_sums[l] += m_struct.basis[j].spin * m_struct.basis[k].spin
-
 
 # This function calculates the sum scaled by the number of Mg-Mg bonds
 def calculate_sums_scaled(m_structure_list, cluster_rule_list, j_rule_list, spin_style, spin_tol):
@@ -222,7 +220,6 @@ def check_mart (Jscale,J1,J2):
     else:
         return 0
 
-
 def summarize_fitting_structures(structures):
     path = 'summary_fitting_structures'
     file = open(path, 'w')
@@ -268,6 +265,4 @@ def summarize_classification(structures,norms):
         file.write(mat.name.ljust(15) + str(Jscale).ljust(17))
         file.write("\n")
     file.close()
-
-
 
