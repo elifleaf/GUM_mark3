@@ -172,6 +172,46 @@ def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style,
                                             if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
                                                 m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
 
+def calculate_sums_scaled(m_structure_list, cluster_rule_list, j_rule_list, spin_style, spin_tol):
+    norms = []
+    for i in range(len(m_structure_list)):          # maybe this loop should be outside, just have this calc sums for a given structure
+        j_count = [0]*len(j_rule_list)
+        m_structure_list[i].create_supercell(spin_style, spin_tol)
+        m_structure_list[i].calculate_distances()
+        m_structure_list[i].calculate_minimums()
+        for j in range(m_structure_list[i].num_Atoms):
+            for k in range(len(m_structure_list[i].basis)):
+                # Calc Cluster sums
+                for l in range(len(cluster_rule_list)):
+                    if m_structure_list[i].basis[j].species in cluster_rule_list[l].home_atom_list:
+                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, cluster_rule_list[l].neighbor_order - 1]:
+                            if m_structure_list[i].check_plane(j, k) == cluster_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
+                                if m_structure_list[i].phase_name == cluster_rule_list[l].phase:
+                                    if cluster_rule_list[l].neighbor_arrangement == 'COMB':
+                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            m_structure_list[i].Cluster_sums[l] += 1
+                                    if cluster_rule_list[l].neighbor_arrangement == 'PERM':
+                                        if m_structure_list[i].basis[k].species in cluster_rule_list[l].neighbor_atom_list:
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
+                                                m_structure_list[i].Cluster_sums[l] += 1
+                # Calc J sums
+                for l in range(len(j_rule_list)):
+                    if m_structure_list[i].basis[j].species in j_rule_list[l].home_atom_list:
+                        if m_structure_list[i].distances[j, k] == m_structure_list[i].mins[j, j_rule_list[l].neighbor_order - 1]:
+                            if m_structure_list[i].check_plane(j, k) == j_rule_list[l].plane or m_structure_list[i].check_plane(j, k) == 'ALL':
+                                if m_structure_list[i].phase_name == j_rule_list[l].phase:
+                                    if j_rule_list[l].neighbor_arrangement == 'COMB':
+                                        if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
+                                            m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
+                                            j_count[l]+=1
+                                    if j_rule_list[l].neighbor_arrangement == 'PERM':
+                                        if m_structure_list[i].basis[k].species in j_rule_list[l].neighbor_atom_list:
+                                            if m_structure_list[i].basis[k].species != m_structure_list[i].basis[j].species:
+                                                m_structure_list[i].J_sums[l] += m_structure_list[i].basis[j].spin * m_structure_list[i].basis[k].spin
+                                                j_count[l]+=1
+        norms.append(j_count)
+    return norms
+
 def summarize_fitting_structures(structures):
     path = 'summary_fitting_structures'
     file = open(path, 'w')
@@ -199,5 +239,24 @@ def check_duplicate_structures(structures):
                     print('Duplicate fitting structure found: ',structures[i].name,',',structures[j].name,'\n')
     return dupl
 
+def summarize_classification(structures,norms):
+    path = 'summary_classification'
+    file = open(path, 'w')
+    file.write("NAME".ljust(15) + "SCALED_SUMS->\n")
+
+    for i in range(len(structures)):
+        mat = structures[i]
+        Jsums = mat.J_sums
+        Jcounts = norms[i]
+        Jscale = []
+        for j in range(len(Jcounts)):
+            Jcount = Jcounts[j]
+            if Jcount == 0:
+                Jscale.append(0.0)
+            else:
+                Jscale.append(Jsums[j]/Jcount)
+        file.write(mat.name.ljust(15) + str(Jscale).ljust(17))
+        file.write("\n")
+    file.close()
 
 

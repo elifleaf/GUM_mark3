@@ -14,8 +14,6 @@ from scipy.optimize import least_squares
 from sklearn.linear_model import Ridge
 from sklearn import linear_model
 
-
-
 def read_Js(num_Js):
     js_file = open('output','r')
     Js = []
@@ -168,8 +166,8 @@ def ridge_simple(m_structure_list,alpha):
     a = np.matrix(a)
     b = np.transpose(np.matrix(b))
 
-    # evaluate coefficients for different regularization parameters and plot results
-    # would like to make this label the different curves with the parameter name
+# evaluate coefficients for different regularization parameters and plot results
+# would like to make this label the different curves with the parameter name
     n_alphas = 50
     alpha_list = np.logspace(-10,10,n_alphas)
     coefs = []
@@ -190,7 +188,7 @@ def ridge_simple(m_structure_list,alpha):
     plt.title('Ridge coefficients as a function of regularization')
     plt.axis('tight')
     plt.savefig('regularization.pdf')
-
+    
     plt.figure(2)
     bx = plt.gca()
     bx.plot(alpha_list, scores)
@@ -201,12 +199,12 @@ def ridge_simple(m_structure_list,alpha):
     plt.title('Fitting score as a function of regularization')
     plt.axis('tight')
     plt.savefig('scores.pdf')
-
+    
     # determine regularization parameter using leave-one-out cross-validation
     ridge_fit = linear_model.RidgeCV(alphas=alpha_list,fit_intercept=False)
     ridge_fit.fit(a,b)
     print('Selected regularization parameter using cross validation: ',ridge_fit.alpha_)
-
+    
     Js = ridge_fit.coef_[0]
     #intercept = ridge_fit.intercept_[0]
     intercept = 0
@@ -280,8 +278,8 @@ def ridge_simple(m_structure_list,alpha):
 
 def write_fitting_parameters(structures, clusters_list, j_list, Js, intercept, limit):
     label = []
-        #    for i in range(len(beg_list)):
-        #label.append(beg_list[i].name)
+    #    for i in range(len(beg_list)):
+    #label.append(beg_list[i].name)
     for i in range(len(clusters_list)):
         label.append(clusters_list[i].name)
     for i in range(len(j_list)):
@@ -298,11 +296,11 @@ def write_fitting_parameters(structures, clusters_list, j_list, Js, intercept, l
     file.write("Name".ljust(20)+"Actual Energy".ljust(20)+"Predicted Energy".ljust(20)+"Magnetic Order".ljust(20)+"Phase".ljust(20)+"Weight".ljust(20)+"\n")
     for i in range(len(structures)):         # seems like energy evaluation should just be a function we can call
         mat = structures[i]
-            #        if mat.phase_name != "pmmmm":
+        #        if mat.phase_name != "pmmmm":
         file.write(str(mat.name).ljust(20) + str(mat.enrg).ljust(20))
         new_enrg = intercept
-                #for j in range(len(beg_list)):
-                #new_enrg += Js[j] * structures[i].BEG_sums[j]
+        #for j in range(len(beg_list)):
+        #new_enrg += Js[j] * structures[i].BEG_sums[j]
         for k in range(len(clusters_list)):
             new_enrg += Js[k] * structures[i].Cluster_sums[k]
         for l in range(len(j_list)):
@@ -570,7 +568,7 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
     comp0_min = min(e_comp0)
     comp50_min = min(e_comp50)
     offset = (comp50_min-comp0_min)/.5
-#offset = 0
+    #offset = 0
     enrg_list = []
     for i in range(len(M_structures)):
         if M_structures[i].phase_name != "pmmmm":
@@ -582,8 +580,8 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
         comp = mat.composition[2]/mat.composition[0]
         if mat.phase_name != "pmmmm":
             new_enrg = intercept
-                #for j in range(len(beg_list)):
-                #new_enrg += Js[j] * M_structures[i].BEG_sums[j]        # ugh - here evaluating it again, now above hull
+            #for j in range(len(beg_list)):
+            #new_enrg += Js[j] * M_structures[i].BEG_sums[j]        # ugh - here evaluating it again, now above hull
             for k in range(len(clusters_list)):
                 new_enrg += Js[k] * M_structures[i].Cluster_sums[k]
             for l in range(len(j_list)):
@@ -595,7 +593,7 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
     x4_itter = -.5
     x6_itter = -.5
     for i in range(len(enrg_list)):
-       if M_structures[i].phase_name != "pmmmm":
+        if M_structures[i].phase_name != "pmmmm":
             if int(M_structures[i].composition[1]) == 8:
                 x = 1.5
                 x2_itter += .08
@@ -629,8 +627,8 @@ def plot_data3(M_structures, clusters_list, j_list, Js, intercept, limit):
                 #plt.plot([x + x_itter, x + x_itter], [y, float(new_enrg_list[i])], lw=1, color="k")
                 plt.plot(x + x_itter, y, lw=0, markersize=8, marker=m, color=c)
                 plt.plot(x + x_itter, float(new_enrg_list[i]), lw=0, markersize=8, marker=".", color="r")
-    #plt.xlim(0,8)
-    #plt.ylim(-1,9)
+#plt.xlim(0,8)
+#plt.ylim(-1,9)
     plt.rc('lines', linewidth=1)
     plt.title("NiMn -- Ni$_2$MnIn Composition Energies", fontsize=16)
     plt.xlabel("Composition", fontsize=14)
