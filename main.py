@@ -84,7 +84,6 @@ J_rules = cmr.read_j_rules(j_file)
 # postprocess according to user selected parameters above and the cluster and j rules
 # calculation of sums and checking for duplicates occurs in here now
 # if a given structure is considered a duplicate then it is not added to the structure_list
-<<<<<<< HEAD
 M_structures,norms = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
 
 ppv.phase_determine(M_structures,norms,J_rules)
@@ -93,19 +92,13 @@ ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp,norms)
 
 # Calculate the scaled sum
 #norms = ppv.calculate_sums_scaled(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
-=======
-M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
 
-ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
->>>>>>> elifleaf/master
 
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
 ppv.summarize_fitting_structures(M_structures)
-<<<<<<< HEAD
 #ppv.summarize_classification(M_structures,norms)
-=======
->>>>>>> elifleaf/master
+
 
 ## Ridge Regression Fitting with Regularization
 Js,intercept = cfp.ridge_simple(M_structures,1)

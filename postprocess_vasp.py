@@ -18,10 +18,7 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
     m_struct_list = []
     data = open(data_file, 'r')
     lines = data.readlines()
-<<<<<<< HEAD
     norms = []
-=======
->>>>>>> elifleaf/master
     for i in range(len(lines)):
         if '#' in lines[i]:
             species = (lines[i].split(' '))
@@ -30,26 +27,17 @@ def generate_m_structure(data_file, num_Cluster_rules, num_J_rules, aust_tol, sp
             for j in range(m_struct.num_Atoms):
                 atom_data = lines[i + j + 2]
                 m_struct.set_atom_properties(j, atom_data, spin_style, spin_tol)
-<<<<<<< HEAD
             #calculate_sums(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
             j_count = calculate_sums_scaled(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
-=======
-            calculate_sums(m_struct, Cluster_rules, J_rules, spin_style, spin_tol)
->>>>>>> elifleaf/master
             # NEED TO ASSIGN SPIN TYPE HERE BASED ON CALCULATED SUMS - need a function for this.
             if m_struct.phase_name != 'prem':
                 if check_duplicate_structures(m_struct,m_struct_list)=='False':
                     m_struct_list.append(m_struct)
-<<<<<<< HEAD
                     norms.append(j_count)
     return m_struct_list,norms
 
 def write_structures_processedvasp(structures,data_file_pp,norms):
-=======
-    return m_struct_list
 
-def write_structures_processedvasp(structures,data_file_pp):
->>>>>>> elifleaf/master
     file = open(data_file_pp, 'w')
     for i in range(len(structures)):
         file.write('# Ni Mn In \n')            # hard coding!
@@ -58,11 +46,9 @@ def write_structures_processedvasp(structures,data_file_pp):
         for j in range(len(out)):
             sums = str(out[j])
             file.write(sums.ljust(20))
-<<<<<<< HEAD
         file.write("".ljust(10))
         file.write(str(norms[i]).ljust(20))
-=======
->>>>>>> elifleaf/master
+
         file.write("\n")
         for j in range(mat.num_Atoms):
             file.write("\t")
@@ -237,8 +223,6 @@ def check_mart (Jscale,J1,J2):
     else:
         return 0
 
-=======
->>>>>>> elifleaf/master
 def summarize_fitting_structures(structures):
     path = 'summary_fitting_structures'
     file = open(path, 'w')
@@ -265,7 +249,6 @@ def check_duplicate_structures(structure,structure_list):
                 print('Duplicate fitting structure found: ',structure.name,'(energy =',structure.enrg,'eV), ',structure_list[i].name,'(energy =',structure_list[i].enrg,'eV)')
     return dupl
 
-<<<<<<< HEAD
 def summarize_classification(structures,norms):
     path = 'summary_classification'
     file = open(path, 'w')
@@ -285,7 +268,6 @@ def summarize_classification(structures,norms):
         file.write(mat.name.ljust(15) + str(Jscale).ljust(17))
         file.write("\n")
     file.close()
-=======
 
 >>>>>>> elifleaf/master
 
