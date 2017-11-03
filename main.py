@@ -4,8 +4,8 @@ import postprocess_vasp as ppv
 import clustermag_rules as cmr  
 import calc_fitting_params as cfp
 #import mc_functions as mc
-#import mc_functions_2 as mc2
-#import mc_supercell as ms
+import mc_functions_2 as mc2
+import mc_supercell as ms
 import sys
 
 ############################
@@ -84,6 +84,7 @@ J_rules = cmr.read_j_rules(j_file)
 # postprocess according to user selected parameters above and the cluster and j rules
 # calculation of sums and checking for duplicates occurs in here now
 # if a given structure is considered a duplicate then it is not added to the structure_list
+<<<<<<< HEAD
 M_structures,norms = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
 
 ppv.phase_determine(M_structures,norms,J_rules)
@@ -92,11 +93,19 @@ ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp,norms)
 
 # Calculate the scaled sum
 #norms = ppv.calculate_sums_scaled(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
+=======
+M_structures = ppv.generate_m_structure(vasp_data_file, len(Cluster_rules), len(J_rules), aust_tol, spin_style, spin_tol, Cluster_rules, J_rules)
+
+ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp)
+>>>>>>> elifleaf/master
 
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
 ppv.summarize_fitting_structures(M_structures)
+<<<<<<< HEAD
 #ppv.summarize_classification(M_structures,norms)
+=======
+>>>>>>> elifleaf/master
 
 ## Ridge Regression Fitting with Regularization
 Js,intercept = cfp.ridge_simple(M_structures,1)
@@ -120,30 +129,30 @@ cfp.plot_data3(M_structures,Cluster_rules,J_rules,Js,intercept,200)
 ## Code for running the actual MonteCarlo simulation.
 ## First create and initialize an array of atom objects for the simulation
 ## then run MonteCarlo.
-#temp_data = open('Temp_data','a')
-#temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
-#temp_data.close()
+## temp_data = open('Temp_data','a')
+## temp_data.write('size,Temp,passes,H_avg,mimj_avg,mag_avg,absmag_avg,phase_avg,absphase_avg\n')
+## temp_data.close()
 
-#x_pts = 4 #|
-#y_pts = 4 #|- Dimensions of the mc_supercellObj (simulation supercell)
-#z_pts = 4 #|
-#phase_init = 'mart' # initial phase configuration
-#spin_init = 'FM' # initial spin configuration
-#species_init = 'ordered'
-#num_passes = 5 # number of cluster/wolf moves done
-#num_sub_passes = 5 # number of spin/species flips done per cluster/wolf move
-#Temp0 = 100 # initial temperature in K
-#TempF = 100 # final temperature in K
-#Temp_inc = 100 # temperature increase per pass in K
+## x_pts = 2 #|
+## y_pts = 2 #|- Dimensions of the mc_supercellObj (simulation supercell)
+## z_pts = 4 #|
+## phase_init = 'mart' # initial phase configuration
+## spin_init = 'FM' # initial spin configuration
+## species_init = 'ordered'
+## num_passes = 5 # number of cluster/wolf moves done
+## num_sub_passes = 5 # number of spin/species flips done per cluster/wolf move
+## Temp0 = 100 # initial temperature in K
+## TempF = 100 # final temperature in K
+## Temp_inc = 100 # temperature increase per pass in K
 
 ## Initialize an array of atoms with ms.mc_supercellObj(size,species,composition)
 ## size is (x,y,z)dimensions, species is types of atoms allowed (0=Ni,1=Mn,2=In)
 ## composition is number of each atom (#Ni,#Mn,#In)
-#lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[32,32,0],phase_init,spin_init,species_init)
-##sys.setrecursionlimit(lattice.num_sites+2)
+## lattice = ms.mc_supercellObj((x_pts,y_pts,z_pts),(0,1,2),[8,8,0],phase_init,spin_init,species_init)
+#sys.setrecursionlimit(lattice.num_sites+2)
 ## To actually run the simulation use
 ## mc.run_montecarlo(reference_to_atom_array,number_of_passes,starting_temp, BEG_rules,Cluster_rules,J_rules,plot_figs=TRUE)
 ## BEG_rules,Cluster_rules,J_rules are objects that determine when and how the fitted parameters are applied
-#print("Beginning MonteCarlo\n")
-##mc.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
-#mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
+## print("Beginning MonteCarlo\n")
+## mc.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
+##mc2.run_WA_MCA(lattice,num_passes,num_sub_passes,Temp0,Temp_inc,TempF,Cluster_rules,J_rules,Js,do_figs=True)
