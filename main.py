@@ -93,10 +93,11 @@ ppv.write_structures_processedvasp(M_structures,vasp_data_file_pp,norms)
 # Calculate the scaled sum
 #norms = ppv.calculate_sums_scaled(M_structures, Cluster_rules, J_rules, spin_style, spin_tol)
 
+
 # Seems like there should be the option to read the sums from the
 # summary_fitting_structures file to avoid doing this summing each time.
 ppv.summarize_fitting_structures(M_structures)
-#ppv.summarize_classification(M_structures,norms)
+
 
 ## Ridge Regression Fitting with Regularization
 Js,intercept = cfp.ridge_simple(M_structures,1)
