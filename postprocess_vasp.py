@@ -145,6 +145,7 @@ def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style,
                                                 if m_structure_list.basis[k].species != 2:
                                                     m_structure_list.mnmn_count[l]+=1
 
+<<<<<<< HEAD
 def summarize_fitting_structures(structures):
     path = 'summary_fitting_structures'
     file = open(path, 'w')
@@ -178,6 +179,66 @@ def summarize_fitting_structures(structures):               # WHY DOES THIS FUNC
                 file.write(sums.ljust(7))
         file.write("\n")
     file.close()
+=======
+def summarize_fitting_structures(structures,threshold):
+   path = 'summary_fitting_structures'
+   file = open(path, 'w')
+   file.write("NAME".ljust(15) + "PHASE".ljust(7) + "LCONST".ljust(15) + "MAG".ljust(6) + "ENERG".ljust(17) + "SUMS->\n")
+
+   Cluster_sum_length = len(structures[0].Cluster_sums)
+   J_sum_length = len(structures[0].J_sums)
+   C_sum_sum = np.array([0.0] * Cluster_sum_length)
+   J_sum_sum = np.array([0.0] * J_sum_length)
+   C_max = np.array([0.0] * Cluster_sum_length)
+   J_max = np.array([0.0] * J_sum_length)
+   for i in range(len(structures)):
+       mat = structures[i]
+       out = [mat.enrg, mat.Cluster_sums, mat.J_sums]
+       np_C_sum = np.absolute(np.array(mat.Cluster_sums))
+       np_J_sum = np.absolute(np.array(mat.J_sums))
+       for j in range(len(np_C_sum)):
+           if np_C_sum[j] > C_max[j]:
+               C_max[j] = np_C_sum[j]
+       for j in range(len(np_J_sum)):
+           if np_J_sum[j] > J_max[j] :
+               J_max[j] = np_J_sum[j]
+
+       C_sum_sum = C_sum_sum + np_C_sum
+       J_sum_sum = J_sum_sum + np_J_sum
+       file.write(mat.name.ljust(15) + mat.phase_name.ljust(7) + str(round(mat.LCs[0],2)).ljust(5) + str(round(mat.LCs[1],2)).ljust(5) + str(round(mat.LCs[2],2)).ljust(5) + mat.mag_phase.ljust(7))
+       for j in range(len(out)):
+           sums = str(out[j])
+           if j == 0:
+               file.write(sums.ljust(17))
+           else:
+               file.write(sums.ljust(7))
+       file.write("\n")
+   file.write(str(C_sum_sum.tolist()) + str(J_sum_sum.tolist()))
+   file.write("\n")
+
+   C_max = C_max * len(structures)
+   J_max = J_max * len(structures)
+
+   C_ratio = C_sum_sum/C_max
+   J_ratio = J_sum_sum/J_max
+   warning = False
+   for i in range(len(C_ratio)):
+       if np.isnan(C_ratio[i]):
+           C_ratio[i] = 0.0
+
+       if C_ratio[i] < threshold:
+           warning = True
+   for i in range(len(J_ratio)):
+       if np.isnan(J_ratio[i]):
+           J_ratio[i] = 0.0
+
+       if J_ratio[i] < threshold:
+           warning = True
+   if warning:
+        print("Warning! Check summary_fitting_structures")
+   file.write(str(C_ratio.tolist()) + str(J_ratio.tolist()))
+   file.write("\n")
+   file.close()
 
 def check_duplicate_structures(structure,structure_list):
     dupl = 'False';
@@ -189,7 +250,6 @@ def check_duplicate_structures(structure,structure_list):
                     print('Duplicate fitting structure found: ',structure.name,'(energy =',structure.enrg,'eV), ',structure_list[i].name,'(energy =',structure_list[i].enrg,'eV) ',abs((structure.enrg-structure_list[i].enrg)/structure.enrg))
                     print('     Jsums are: ',structure.J_sums,structure_list[i].J_sums)
     return dupl
-
 
 def summarize_classification(structures):
     path = 'summary_classification'

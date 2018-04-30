@@ -141,8 +141,8 @@ def ridge_simple(m_structure_list,alpha,Cluster_rules,J_rules):
     #ridge_fit.fit(a,b)
 
     Js = ridge_fit.coef_[0]
-    intercept = ridge_fit.intercept_[0]
-    #intercept = 0
+    #intercept = ridge_fit.intercept_[0]            # swap commented lines if want intercept
+    intercept = 0
     #predict=ridge_fit.predict(a)
     #print(predict)
     #JS_list = []
