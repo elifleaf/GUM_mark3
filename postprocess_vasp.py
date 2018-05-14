@@ -145,7 +145,7 @@ def calculate_sums(m_structure_list, cluster_rule_list, j_rule_list, spin_style,
                                                 if m_structure_list.basis[k].species != 2:
                                                     m_structure_list.mnmn_count[l]+=1
 
-<<<<<<< HEAD
+
 def summarize_fitting_structures(structures):
     path = 'summary_fitting_structures'
     file = open(path, 'w')
@@ -179,8 +179,8 @@ def summarize_fitting_structures(structures):               # WHY DOES THIS FUNC
                 file.write(sums.ljust(7))
         file.write("\n")
     file.close()
-=======
-def summarize_fitting_structures(structures,threshold):
+
+def summarize_fitting_structures(structures,threshold): # OK NOW IT APPEARS THREE TIMES
    path = 'summary_fitting_structures'
    file = open(path, 'w')
    file.write("NAME".ljust(15) + "PHASE".ljust(7) + "LCONST".ljust(15) + "MAG".ljust(6) + "ENERG".ljust(17) + "SUMS->\n")
